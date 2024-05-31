@@ -12,30 +12,30 @@ const WIN_CON = [
   [2, 4, 6],
 ];
 
-function GameBoard({ gameState, setGameState, playerTurn, setPlayerTurn }) {
+function GameContainer({ gameBoard, setGameBoard, playerTurn, setPlayerTurn }) {
   const handleOnClick = (event) => {
     const cellIndex = Number(event.target.getAttribute("data-cell-index"));
 
     // if cell already has a value
-    if (gameState[cellIndex] != "") {
+    if (gameBoard[cellIndex] != "") {
       return;
     }
 
-    // update gameState array in an immutable way
-    const newGameState = [...gameState];
+    // update gameBoard array in an immutable way
+    const newGameState = [...gameBoard];
     // add player symbol into array
     newGameState[cellIndex] = playerTurn;
-    setGameState(newGameState);
+    setGameBoard(newGameState);
 
-    // the issue here is that update gameState is scheduled not resolved here, so check win here doesn't work
+    // the issue here is that update gameBoard is scheduled not resolved here, so check win here doesn't work
     // check win
   };
 
   useEffect(() => {
-    console.log(gameState);
+    console.log(gameBoard);
     checkWin();
     changeTurns();
-  }, [gameState]);
+  }, [gameBoard]);
 
   const changeTurns = () => {
     setPlayerTurn(playerTurn === "X" ? "O" : "X");
@@ -46,9 +46,9 @@ function GameBoard({ gameState, setGameState, playerTurn, setPlayerTurn }) {
     WIN_CON.forEach((combination) => {
       const [a, b, c] = combination;
       if (
-        gameState[a] === playerTurn &&
-        gameState[b] === playerTurn &&
-        gameState[c] === playerTurn
+        gameBoard[a] === playerTurn &&
+        gameBoard[b] === playerTurn &&
+        gameBoard[c] === playerTurn
       ) {
         console.log(`${playerTurn} won`);
       }
@@ -57,8 +57,8 @@ function GameBoard({ gameState, setGameState, playerTurn, setPlayerTurn }) {
 
   return (
     <div className="grid grid-cols-3 gap-[2vw]">
-      {/* for each item, therefore, player in this case is what get's inserted in gameState */}
-      {gameState.map((gameStateArrayValue, index) => {
+      {/* for each item, therefore, player in this case is what get's inserted in gameBoard */}
+      {gameBoard.map((gameStateArrayValue, index) => {
         return (
           <Cell
             key={index}
@@ -71,4 +71,4 @@ function GameBoard({ gameState, setGameState, playerTurn, setPlayerTurn }) {
   );
 }
 
-export default GameBoard;
+export default GameContainer;
