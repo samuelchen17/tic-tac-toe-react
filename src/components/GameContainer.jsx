@@ -12,7 +12,14 @@ const WIN_CON = [
   [2, 4, 6],
 ];
 
-function GameContainer({ gameBoard, setGameBoard, playerTurn, setPlayerTurn }) {
+function GameContainer({
+  gameBoard,
+  setGameBoard,
+  playerTurn,
+  setPlayerTurn,
+  newGame,
+  INITIAL_GAME_BOARD,
+}) {
   const handleOnClick = (event) => {
     const cellIndex = Number(event.target.getAttribute("data-cell-index"));
 
@@ -21,24 +28,30 @@ function GameContainer({ gameBoard, setGameBoard, playerTurn, setPlayerTurn }) {
       return;
     }
 
+    updateGameBoard(cellIndex, gameBoard);
+    // the issue here is that update gameBoard is scheduled not resolved here, so check win here doesn't work
+  };
+
+  const updateGameBoard = (cellIndex, gameBoard) => {
     // update gameBoard array in an immutable way
     const newGameState = [...gameBoard];
     // add player symbol into array
     newGameState[cellIndex] = playerTurn;
     setGameBoard(newGameState);
-
-    // the issue here is that update gameBoard is scheduled not resolved here, so check win here doesn't work
-    // check win
   };
 
   useEffect(() => {
     console.log(gameBoard);
-    checkWin();
-    changeTurns();
+    if (gameBoard === INITIAL_GAME_BOARD) {
+      console.log("no player switch");
+    } else {
+      checkWin();
+    }
   }, [gameBoard]);
 
   const changeTurns = () => {
     setPlayerTurn(playerTurn === "X" ? "O" : "X");
+    console.log(`${playerTurn} player switch`);
   };
 
   // go through win con array
@@ -51,6 +64,9 @@ function GameContainer({ gameBoard, setGameBoard, playerTurn, setPlayerTurn }) {
         gameBoard[c] === playerTurn
       ) {
         console.log(`${playerTurn} won`);
+        newGame();
+      } else {
+        changeTurns();
       }
     });
   };
@@ -72,3 +88,12 @@ function GameContainer({ gameBoard, setGameBoard, playerTurn, setPlayerTurn }) {
 }
 
 export default GameContainer;
+
+// gameStatus = true
+// after checkWin or Draw, gameStatus = false
+// press restart for game status to be set to true again
+
+// when gameStatus = true, start the game
+// const startGame = () => {
+
+// }
