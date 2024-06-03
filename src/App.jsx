@@ -6,16 +6,16 @@ import TurnDisplay from "./components/TurnDisplay";
 const INITIAL_GAME_BOARD = ["", "", "", "", "", "", "", "", ""];
 
 function App() {
-  // const [gameState, setGameState] = true;
   const [gameBoard, setGameBoard] = useState(INITIAL_GAME_BOARD);
   const [playerTurn, setPlayerTurn] = useState("X");
   const [winner, setWinner] = useState(false);
-  // const [gameStatus, setGameStatus] = useState(true);
+  const [draw, setDraw] = useState(false);
 
   const newGame = () => {
     setGameBoard(INITIAL_GAME_BOARD);
     setPlayerTurn("X");
     setWinner(false);
+    setDraw(false);
   };
 
   return (
@@ -30,9 +30,10 @@ function App() {
           INITIAL_GAME_BOARD,
           setWinner,
           winner,
+          setDraw,
         }}
       />
-      <TurnDisplay {...{ playerTurn, winner }} />
+      <TurnDisplay {...{ playerTurn, winner, draw }} />
       <RestartBtn {...{ newGame }} />
     </div>
   );

@@ -20,6 +20,7 @@ function GameContainer({
   INITIAL_GAME_BOARD,
   setWinner,
   winner,
+  setDraw,
 }) {
   const handleOnClick = (event) => {
     // if a winner is declared, stop user from clicking board
@@ -55,6 +56,7 @@ function GameContainer({
   // go through win con array
   const checkWin = () => {
     let isWin = false;
+    let isDraw = false;
     WIN_CON.forEach((combination) => {
       const [a, b, c] = combination;
       if (
@@ -68,8 +70,16 @@ function GameContainer({
         return;
       }
     });
+
+    if (gameBoard.every((cell) => cell !== "")) {
+      setDraw(true);
+      isDraw = true;
+      console.log(`draw`);
+      return;
+    }
+
     // changeTurns does not run if checkWin goes through
-    if (!isWin) {
+    if (!isWin && !isDraw) {
       changeTurns();
     }
   };
@@ -95,12 +105,3 @@ function GameContainer({
 }
 
 export default GameContainer;
-
-// gameStatus = true
-// after checkWin or Draw, gameStatus = false
-// press restart for game status to be set to true again
-
-// when gameStatus = true, start the game
-// const startGame = () => {
-
-// }
