@@ -9,11 +9,13 @@ function App() {
   // const [gameState, setGameState] = true;
   const [gameBoard, setGameBoard] = useState(INITIAL_GAME_BOARD);
   const [playerTurn, setPlayerTurn] = useState("X");
+  const [winner, setWinner] = useState(false);
   // const [gameStatus, setGameStatus] = useState(true);
 
   const newGame = () => {
     setGameBoard(INITIAL_GAME_BOARD);
     setPlayerTurn("X");
+    setWinner(false);
   };
 
   return (
@@ -25,13 +27,13 @@ function App() {
           setGameBoard,
           playerTurn,
           setPlayerTurn,
-          newGame,
           INITIAL_GAME_BOARD,
+          setWinner,
+          winner,
         }}
       />
-      <TurnDisplay {...{ playerTurn }} />
-      <div>win message</div>
-      <RestartBtn />
+      <TurnDisplay {...{ playerTurn, winner }} />
+      <RestartBtn {...{ newGame }} />
     </div>
   );
 }

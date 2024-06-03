@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Cell from "./Cell";
 
 const WIN_CON = [
@@ -17,10 +17,14 @@ function GameContainer({
   setGameBoard,
   playerTurn,
   setPlayerTurn,
-  newGame,
   INITIAL_GAME_BOARD,
+  setWinner,
+  winner,
 }) {
   const handleOnClick = (event) => {
+    // if a winner is declared, stop user from clicking board
+    if (winner) return;
+
     const cellIndex = Number(event.target.getAttribute("data-cell-index"));
 
     // if cell already has a value
@@ -43,19 +47,14 @@ function GameContainer({
   useEffect(() => {
     console.log(gameBoard);
     if (gameBoard === INITIAL_GAME_BOARD) {
-      console.log("no player switch");
-    } else {
-      checkWin();
+      return;
     }
+    checkWin();
   }, [gameBoard]);
-
-  const changeTurns = () => {
-    setPlayerTurn(playerTurn === "X" ? "O" : "X");
-    console.log(`${playerTurn} player switch`);
-  };
 
   // go through win con array
   const checkWin = () => {
+    let isWin = false;
     WIN_CON.forEach((combination) => {
       const [a, b, c] = combination;
       if (
@@ -64,11 +63,19 @@ function GameContainer({
         gameBoard[c] === playerTurn
       ) {
         console.log(`${playerTurn} won`);
-        newGame();
-      } else {
-        changeTurns();
+        setWinner(true);
+        isWin = true;
+        return;
       }
     });
+    // changeTurns does not run if checkWin goes through
+    if (!isWin) {
+      changeTurns();
+    }
+  };
+
+  const changeTurns = () => {
+    setPlayerTurn(playerTurn === "X" ? "O" : "X");
   };
 
   return (
